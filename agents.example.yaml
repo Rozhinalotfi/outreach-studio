@@ -1,0 +1,37 @@
+# Copy to ~/.outreach-studio/agents.yaml (or point OUTREACH_CONFIG at it) to change the panel.
+# Providers name the environment variable holding their key; keys never go in this file.
+
+providers:
+  # Built in: anthropic, openai, gemini, openrouter, ollama. Add any OpenAI-compatible server:
+  groq:
+    type: openai
+    base_url: https://api.groq.com/openai/v1
+    api_key_env: GROQ_API_KEY
+
+agents:          # two or more; each writes a draft and judges the others' drafts blind
+  - id: storyteller
+    persona: The Storyteller
+    provider: anthropic
+    model: claude-sonnet-4-5
+    lens: Lead with the most genuine connection between the sender and the recipient. Warm and specific, never gushing.
+  - id: strategist
+    persona: The Strategist
+    provider: openai
+    model: gpt-5.5
+    lens: Lead with the value to the recipient. Crisp and confident, executive brevity.
+  - id: analyst
+    persona: The Analyst
+    provider: openrouter
+    model: google/gemini-3.1-pro-preview
+    lens: Lead with a sharp, informed observation about the recipient's work and connect it precisely to the ask.
+
+roles:           # which agent does single-agent jobs; falls back to the first agent with a key
+  researcher: storyteller
+  analyst: storyteller
+  auditor: strategist
+  reviser: storyteller
+
+search:
+  provider: none   # exa | tavily | brave | none
+
+consensus_margin: 0.75
